@@ -1,5 +1,6 @@
 Here you will find the tech stack for `AOC2024`
-This project is under the domain of the Computer Science Society at City University. For all information contact: 
+This project is under the domain of the Computer Science Society at City University. 
+For all information contact: citycss@outlook.com
 For technical information contact filippo.vicini2@gmail.com
 
 ---
