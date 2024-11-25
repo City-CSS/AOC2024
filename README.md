@@ -1,51 +1,19 @@
-# React + TypeScript + Vite
+Here you will find the tech stack for `AOC2024`
+This project is under the domain of the Computer Science Society at City University. For all information contact: 
+For technical information contact filippo.vicini2@gmail.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+---
+## Project Information 
+The AOC https://adventofcode.com/ is a challenge that runs from 1st of December to 25th of December with a different coding challenge each day which needs to be solved into 24h. 
+Our goal with this challenge is to create a big competition between all students in the UK. There will be prizes for winners... 
 
-Currently, two official plugins are available:
+For additional information reference the document: https://docs.google.com/document/d/1dmZSeopOQ5wsgZ013NqVmoFAjBiQxAW1HMrvLCnpEXM/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+For sign ups reference: https://forms.gle/AKNf4hp8nQBqQCjr7
+---
+## Tech stack 
+The goal of this project is to keep it simple yet effective the tech stack is Vite x Tailwind x [Backend]
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-- Configure the top-level `parserOptions` property like this:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
-# AOC2024
