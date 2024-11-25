@@ -6,7 +6,6 @@ For technical information contact filippo.vicini2@gmail.com
 ## Project Information 
 The AOC https://adventofcode.com/ is a challenge that runs from 1st of December to 25th of December with a different coding challenge each day which needs to be solved into 24h. 
 Our goal with this challenge is to create a big competition between all students in the UK. There will be prizes for winners... 
-
 For additional information reference the document: https://docs.google.com/document/d/1dmZSeopOQ5wsgZ013NqVmoFAjBiQxAW1HMrvLCnpEXM/
 
 For sign ups reference: https://forms.gle/AKNf4hp8nQBqQCjr7
