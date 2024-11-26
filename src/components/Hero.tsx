@@ -31,7 +31,7 @@ const Hero = () => {
           </div>
 
           <TypingAnimation
-            text="AOC 2024 CSS"
+            text="Advent of Code, UOL"
             className="bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text font-extrabold text-transparent text-7xl lg:text-9xl"
           ></TypingAnimation>
 
