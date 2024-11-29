@@ -6,9 +6,9 @@ const PORT = 6000;
 
 // Configuration
 const config = {
-  sessionCookie: "",
-  leaderboardId: "", // Your leaderboard ID
-  year: "",
+  sessionCookie: "53616c7465645f5f4e18f5cf11ef02c3ea2db55f8f655a638597dce0e8b54e980772dc17e4ba5b0b11f7471ecc52dca275a560debd3256ae6edbcf84bcf8896a",
+  leaderboardId: "4296566", // Your leaderboard ID
+  year: "2024",
 };
 
 // Cache configuration
@@ -18,13 +18,15 @@ const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes in milliseconds
 
 // CORS Configuration
 const corsOptions = {
-  origin: ["http://localhost:5174", "http://127.0.0.1:5174"],
+  origin: ["http://localhost:6000", "http://127.0.0.1:6000"],
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
+
+
 
 app.use(cors(corsOptions));
 
