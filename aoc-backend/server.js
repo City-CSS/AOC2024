@@ -1,14 +1,15 @@
 const express = require("express");
 const axios = require("axios");
+require('dotenv').config();
 const cors = require("cors");
 const app = express();
 const PORT = 6000;
 
 // Configuration
 const config = {
-  sessionCookie: "53616c7465645f5f4e18f5cf11ef02c3ea2db55f8f655a638597dce0e8b54e980772dc17e4ba5b0b11f7471ecc52dca275a560debd3256ae6edbcf84bcf8896a",
   leaderboardId: "4296566", // Your leaderboard ID
   year: "2024",
+  sessionCookie: process.env.SESSION_COOKIE,
 };
 
 // Cache configuration
