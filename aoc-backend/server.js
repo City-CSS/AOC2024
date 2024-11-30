@@ -1,14 +1,15 @@
 const express = require("express");
 const axios = require("axios");
+require('dotenv').config();
 const cors = require("cors");
 const app = express();
 const PORT = 6000;
 
 // Configuration
 const config = {
-  sessionCookie: "53616c7465645f5f4e18f5cf11ef02c3ea2db55f8f655a638597dce0e8b54e980772dc17e4ba5b0b11f7471ecc52dca275a560debd3256ae6edbcf84bcf8896a",
-  leaderboardId: "4296566", // Your leaderboard ID
-  year: "2024",
+  sessionCookie: process.env.SESSION_COOKIE,
+  leaderboardId: "48462", // Your leaderboard ID
+  year: "2023",
 };
 
 // Cache configuration
@@ -43,33 +44,42 @@ const fetchLeaderboardData = async () => {
     return cachedLeaderboard;
   }
 
+  return hitEndpoint(now);
+};
+
+const hitEndpoint = async (now) => {
   try {
-    const url = `https://adventofcode.com/${config.year}/leaderboard/private/view/${config.leaderboardId}.json`;
-
-    const response = await axios.get(url, {
-      headers: {
-        Cookie: `session=${config.sessionCookie}`,
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
-      },
-    });
-
+    let response = await fetchData();
     cachedLeaderboard = response.data;
     lastFetchTime = now;
-
-    console.log(
-      `Leaderboard data fetched successfully at ${new Date().toISOString()}`,
-    );
+    console.log(`Leaderboard data fetched successfully at ${new Date().toISOString()}`);
     return cachedLeaderboard;
   } catch (error) {
-    console.error("Error fetching leaderboard data:", error.message);
-    if (error.response) {
+    if (error.message.includes('REDIRECT_ERROR')) {
+      console.error('Session likely expired:', error.message);
+    } else if (error.response) {
       console.error("Response status:", error.response.status);
       console.error("Response headers:", error.response.headers);
+    } else {
+      console.error("Error fetching leaderboard data:", error.message);
     }
-    throw error;
   }
-};
+}
+
+const fetchData = async () => {
+  const url = `https://adventofcode.com/${config.year}/leaderboard/private/view/${config.leaderboardId}.json`;
+
+  const response = await axios.get(url, {
+    headers: {
+      Cookie: `session=${config.sessionCookie}`
+    },
+  });
+
+  if (typeof response.data === 'string' && response.data.includes('<!DOCTYPE html>'))
+    throw new Error('REDIRECT_ERROR: Received HTML instead of JSON - likely redirected to login page');
+
+  return response;
+}
 
 // Leaderboard endpoint
 app.get("/leaderboard", cors(corsOptions), async (req, res) => {
@@ -93,9 +103,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  console.log(
-    `Fetching leaderboard ID: ${config.leaderboardId} for year ${config.year}`,
-  );
+  console.log(`Fetching leaderboard ID: ${config.leaderboardId} for year ${config.year}`,);
+  await hitEndpoint();
 });
