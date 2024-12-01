@@ -25,3 +25,4 @@ export function loadConfig(): Config {
 
 export const CACHE_DURATION = (process.env.CACHE_DURATION as unknown as number || 15) * 60 * 1000;
 export const PORT = process.env.PORT || 3000;
+
