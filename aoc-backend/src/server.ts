@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, {NextFunction, Request, Response} from "express";
 import axios, {AxiosError, AxiosResponse} from "axios";
 import dotenv from 'dotenv';
 import cors, {CorsOptions} from "cors";
@@ -162,8 +162,9 @@ app.get("/leaderboards", cors(corsOptions), async (_: Request, res: Response) =>
 });
 
 // Error handling middleware
-app.use((err: Error, _: Request, res: Response) => {
-  console.error(err.stack);
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: Error, req: Request, res: Response, _: NextFunction): void => {
+  console.error('Error caught in middleware:', err);
   res.status(500).json(
       {
         error: "Internal Server Error",
