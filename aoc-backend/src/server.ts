@@ -15,14 +15,49 @@ interface Config {
   year: string;
 }
 
-interface LeaderboardData {
-  // TODO: Define
-  [key: string]: any;
+interface Star {
+  star_index: number;
+  get_star_ts: number;
 }
+
+interface DayCompletion {
+  "1": Star;
+  "2": Star;
+}
+
+interface CompletionDayLevel {
+  [day: string]: DayCompletion;
+}
+
+interface Member {
+  id: string;
+  name: string;
+  local_score: number;
+  completion_day_level: CompletionDayLevel;
+}
+
+interface RawMember {
+  id: string;
+  name: string;
+  local_score: number;
+  completion_day_level: CompletionDayLevel;
+  // OTHER FIELDS IGNORED
+}
+
+interface RawLeaderboardData {
+  members: { [key: string]: RawMember };
+  // OTHER FIELDS IGNORED
+}
+
+interface FilteredLeaderboardData {
+  members: Member[];
+}
+
+type LeaderboardData = FilteredLeaderboardData
 
 interface LeaderboardResult {
   id: string;
-  data: LeaderboardData | null;
+  data: FilteredLeaderboardData | null;
   error: string | null;
 }
 
@@ -64,6 +99,17 @@ app.use(cors(corsOptions));
 
 const leaderboardCache = new Map<string, LeaderboardCacheEntry>();
 
+const filterLeaderboardData = (data: RawLeaderboardData): FilteredLeaderboardData => {
+  const members = Object.values(data.members).map(member => ({
+    id: member.id,
+    name: member.name,
+    local_score: member.local_score,
+    completion_day_level: member.completion_day_level
+  }));
+
+  return { members };
+};
+
 // Function to fetch the leaderboard
 const fetchLeaderboardData = async (leaderboardId: string): Promise<LeaderboardData> => {
   const cachedEntry = leaderboardCache.get(leaderboardId);
@@ -76,13 +122,14 @@ const fetchLeaderboardData = async (leaderboardId: string): Promise<LeaderboardD
   return hitEndpoint(leaderboardId);
 };
 
-const hitEndpoint = async (leaderboardId: string): Promise<LeaderboardData> => {
+const hitEndpoint = async (leaderboardId: string): Promise<FilteredLeaderboardData> => {
   try {
     const response = await fetchData(leaderboardId);
-    const newCacheEntry = new LeaderboardCacheEntry(response.data);
+    const filteredData = filterLeaderboardData(response.data);
+    const newCacheEntry = new LeaderboardCacheEntry(filteredData);
     leaderboardCache.set(leaderboardId, newCacheEntry);
     console.log(`Leaderboard ${leaderboardId} data fetched successfully at ${new Date().toISOString()}`);
-    return newCacheEntry.data;
+    return filteredData;
   } catch (error: unknown) {
     if (error instanceof Error && error.message?.includes('REDIRECT_ERROR')) {
       console.error('Session likely expired:', error.message);
@@ -96,10 +143,10 @@ const hitEndpoint = async (leaderboardId: string): Promise<LeaderboardData> => {
   }
 };
 
-const fetchData = async (leaderboardId: string): Promise<AxiosResponse<LeaderboardData>> => {
+const fetchData = async (leaderboardId: string): Promise<AxiosResponse<RawLeaderboardData>> => {
   const url = `https://adventofcode.com/${config.year}/leaderboard/private/view/${leaderboardId}.json`;
 
-  const response = await axios.get<LeaderboardData>(url, {
+  const response = await axios.get<RawLeaderboardData>(url, {
     headers: {
       Cookie: `session=${config.sessionCookie}`
     },
